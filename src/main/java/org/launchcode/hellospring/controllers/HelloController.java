@@ -1,47 +1,47 @@
 package org.launchcode.hellospring.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.Name;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
-@RequestMapping("test")
+@RequestMapping("hello")
 public class HelloController {
 
     // Handles request at path /hello
-    @RequestMapping(value = "hello", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String hello(@RequestParam String name, @RequestParam String language) {
         //return "Hello, " + name + " " + language;
         return createMessage(name, language);
     }
 
-    @GetMapping("hello/{name}/{id}")
-    @ResponseBody
-    public String checkingPathParam(@PathVariable String name, String id) {
-        return "Hello, " + name + "! " + id;
+    @GetMapping("greet")
+    public String checkingPathParam(@RequestParam String name, Model model) {
+        String greeting = "Hello, " + name + "!";
+        model.addAttribute("greeting", greeting);
+        return "hello";
+    }
+
+    @GetMapping("names")
+    public String helloList(Model model) {
+        List<String> languages = new ArrayList<>();
+        languages.add("Java");
+        languages.add("C#");
+        languages.add(".Net");
+        languages.add("Java Script");
+        languages.add("Type Script");
+        model.addAttribute("names", languages);
+        return "hello-list";
     }
 
     @GetMapping("form")
-    @ResponseBody
     public String helloForm() {
-        String html =
-                "<html>" +
-                        "<body>" +
-                        "<form method = 'post' action = 'hello'>" +
-                        "<input type = 'text' name = 'name' />" +
-                        "<select name = 'language' >" +
-                        "<option value = 'french'> French </option> " +
-                        "<option value = 'english' selected> English </option>" +
-                        "<option value = 'hindi'> Hindi </option>" +
-                        "<option value = 'spanish'> Spanish </option>" +
-                        "<option value = 'telugu'> Telugu </option>" +
-                        "<input type = 'submit' value = 'Greet Me!' />" +
-                        "</form>" +
-                        "</body>" +
-                        "</html>";
-        return html;
+        return "form";
     }
 
     public static String createMessage(String name, String language) {
